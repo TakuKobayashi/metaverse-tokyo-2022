@@ -19,8 +19,11 @@ export const Map = () => {
     const map = new mapboxgl.Map({
       container: "map",
       style: "mapbox://styles/mapbox/satellite-streets-v11",
-      center: [-119.99959421984575, 38.619551620333496],
-      zoom: 14,
+      center: {
+        lat: 35.6796449,
+        lng: 139.735763,
+      },
+      zoom: 18,
       pitch: 60,
     })
 
@@ -29,7 +32,6 @@ export const Map = () => {
         type: "raster-dem",
         url: "mapbox://mapbox.mapbox-terrain-dem-v1",
         tileSize: 512,
-        maxZoom: 16,
       })
       map.setTerrain({ source: "mapbox-dem", exaggeration: 1.5 })
       map.addLayer({
