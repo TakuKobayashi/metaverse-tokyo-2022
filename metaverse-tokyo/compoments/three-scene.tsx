@@ -66,13 +66,15 @@ export class ThreeScene extends React.Component {
     scene.add(directionalLight);
 
     this.scene = scene;
-    const camera = new PerspectiveCamera(50, width / height, 0.01);
-    camera.position.set(0, 1.5, -1.5);
+    const camera = new PerspectiveCamera(75, width / height);
+    camera.position.set(0, 6, 18);
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.target.set(0, 0.75 * 1.5, 0);
-    controls.update();    this.camera = camera;
+    controls.enableDamping = true;
+    scene.add(camera)
+    this.camera = camera;
     renderer.setSize(width, height);
     renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.render(scene, camera);
     this.renderer = renderer;
     this.animate();
   }
