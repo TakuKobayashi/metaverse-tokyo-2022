@@ -17,9 +17,7 @@ const Home: NextPage = () => {
         />
       </Head>
 
-      <main className={styles.main}>
-        <Map />
-      </main>
+      <Map />
 
       <footer className={styles.footer}>
         <a
