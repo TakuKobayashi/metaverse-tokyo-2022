@@ -2,9 +2,14 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { BabylonScene } from '../compoments/babylon-scene';
+import { useState, createRef } from 'react';
 import { Map } from '../compoments/mapbox-render-map'
 
 const Home: NextPage = () => {
+  const babylonSceneRef = createRef<BabylonScene>();
+  const babylonScene = <BabylonScene ref={babylonSceneRef} />;
+
   return (
     <div className={styles.container}>
       <Head>
@@ -17,6 +22,7 @@ const Home: NextPage = () => {
         />
       </Head>
 
+      {babylonScene}
       <Map />
 
       <footer className={styles.footer}>
