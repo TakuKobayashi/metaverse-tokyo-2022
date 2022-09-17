@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react"
+import React from "react"
 import mapboxgl from "mapbox-gl"
 
 // Grab the access token from your Mapbox account
@@ -6,13 +6,15 @@ import mapboxgl from "mapbox-gl"
 // in a .env file
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN!
 
-export const Map = () => {
-  const mapContainer = useRef()
+export class MapScene extends React.Component {
+  constructor(props: any) {
+    super(props);
+  }
 
-  // this is where all of our map logic is going to live
-  // adding the empty dependency array ensures that the map
-  // is only created once
-  useEffect(() => {
+  componentDidMount() {
+  }
+
+  initScene(){
     // create the map and configure it
     // check out the API reference for more options
     // https://docs.mapbox.com/mapbox-gl-js/api/map/
@@ -88,14 +90,19 @@ export const Map = () => {
       })
     })
 */
+  }
 
-  }, [])
+  onMapSetupComplete = (divElement: HTMLDivElement) => {
+    this.initScene();
+  };
 
-  return (
-    <div
-      id="map"
-      ref={mapContainer}
-      style={{ width: "100%", height: "100vh" }}
-    />
-  )
+  render() {
+    return (
+      <div
+        id="map"
+        ref={this.onMapSetupComplete}
+        style={{ width: "100%", height: "100vh" }}
+      />
+    );
+  }
 }

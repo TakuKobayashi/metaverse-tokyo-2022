@@ -6,14 +6,14 @@ import styles from '../styles/Home.module.css'
 import { ThreeScene } from '../compoments/three-scene';
 import { useState, createRef } from 'react';
 import axios from 'axios'
-import { Map } from '../compoments/mapbox-render-map'
+import { MapScene } from '../compoments/mapbox-render-map'
 
 
 const Home: NextPage = (context) => {
   console.log(context)
   const threeSceneRef = createRef<ThreeScene>();
   const threeScene = <ThreeScene ref={threeSceneRef} />;
-  const router = useRouter(); 
+  const router = useRouter();
 
   const [responseJson, setResponseJson] = useState('');
   const parseAndShowVRM = (binary: ArrayBuffer | string) => {
@@ -52,7 +52,7 @@ const Home: NextPage = (context) => {
       </Head>
 
       {threeScene}
-      <Map />
+      <MapScene />
 
       <footer className={styles.footer}>
         <a
