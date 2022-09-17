@@ -2,6 +2,7 @@ import React from 'react';
 import { WebGLRenderer, Scene, PerspectiveCamera, DirectionalLight, Color } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRM } from '@pixiv/three-vrm';
+import { OrbitControls } from 'three-orbitcontrols-ts';
 
 export class ThreeScene extends React.Component {
   private canvas: HTMLCanvasElement | null = null;
@@ -55,7 +56,9 @@ export class ThreeScene extends React.Component {
     this.scene = scene;
     const camera = new PerspectiveCamera(50, width / height, 0.01);
     camera.position.set(0, 1.5, -1.5);
-    this.camera = camera;
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 0.75 * 1.5, 0);
+    controls.update();    this.camera = camera;
     renderer.setSize(width, height);
     renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer = renderer;

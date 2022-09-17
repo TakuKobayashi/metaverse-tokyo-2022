@@ -1882,10 +1882,22 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==
 
+three-orbitcontrols-ts@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/three-orbitcontrols-ts/-/three-orbitcontrols-ts-0.1.2.tgz#2040955904022ae19c2e9c52ffdff43168658abd"
+  integrity sha512-HG45dhJX4010lt/Ohk2d2K0kBaxCS6NLO3+wG9BDfMM5ddH7zMPuF3fhcn8vI4eqcSITtid0OoHEttHhjkIKEQ==
+  dependencies:
+    three "^0.83.0"
+
 three@^0.144.0:
   version "0.144.0"
   resolved "https://registry.yarnpkg.com/three/-/three-0.144.0.tgz#2818517169f8ff94eea5f664f6ff1fcdcd436cc8"
   integrity sha512-R8AXPuqfjfRJKkYoTQcTK7A6i3AdO9++2n8ubya/GTU+fEHhYKu1ZooRSCPkx69jbnzT7dD/xEo6eROQTt2lJw==
+
+three@^0.83.0:
+  version "0.83.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.83.0.tgz#3b7f94790af3e021dac1f44a2617569ca2032b0b"
+  integrity sha512-x9TqsmvhHG/Lw16Zi9zbJ0ho+kP8SgIfsz8dJYZbeWaFWoVwdXKolQQAftkUlpuKDys1+6SZIBHoA2QdoZKByQ==
 
 tinyqueue@^2.0.3:
   version "2.0.3"
