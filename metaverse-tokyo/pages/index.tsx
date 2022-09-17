@@ -1,14 +1,43 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import { useRouter } from "next/router";
 import styles from '../styles/Home.module.css'
-import { BabylonScene } from '../compoments/babylon-scene';
+import { ThreeScene } from '../compoments/three-scene';
 import { useState, createRef } from 'react';
+import axios from 'axios'
 import { Map } from '../compoments/mapbox-render-map'
 
-const Home: NextPage = () => {
-  const babylonSceneRef = createRef<BabylonScene>();
-  const babylonScene = <BabylonScene ref={babylonSceneRef} />;
+
+const Home: NextPage = (context) => {
+  console.log(context)
+  const threeSceneRef = createRef<ThreeScene>();
+  const threeScene = <ThreeScene ref={threeSceneRef} />;
+  const router = useRouter(); 
+
+  const [responseJson, setResponseJson] = useState('');
+  const parseAndShowVRM = (binary: ArrayBuffer | string) => {
+    threeSceneRef?.current?.updateVrmArryaBuffer(binary);
+//    const parsedVrm = parseMetum(binary);
+//    setResponseJson(JSON.stringify(JSON.parse(parsedVrm.metaString), null, 2));
+  };
+  const onLoadFile = (files: File[]) => {
+    for (const file of files) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const readFileResult = reader.result;
+        if (readFileResult !== null) {
+          parseAndShowVRM(readFileResult);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  }
+  const onLoadVRM = async (url: string) => {
+    const vrmRes = await axios.get(url, { responseType: 'arraybuffer' });
+    parseAndShowVRM(vrmRes.data);
+  };
+  onLoadVRM("http://localhost:3000/AliciaSolid.vrm")
 
   return (
     <div className={styles.container}>
@@ -22,7 +51,7 @@ const Home: NextPage = () => {
         />
       </Head>
 
-      {babylonScene}
+      {threeScene}
       <Map />
 
       <footer className={styles.footer}>
