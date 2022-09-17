@@ -18,7 +18,8 @@ export const Map = () => {
     // https://docs.mapbox.com/mapbox-gl-js/api/map/
     const map = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/mapbox/satellite-streets-v11",
+//      style: "mapbox://styles/mapbox/satellite-streets-v11",
+      style: 'mapbox://styles/mapbox/light-v10',
       center: {
         lat: 35.6796449,
         lng: 139.735763,
@@ -26,7 +27,49 @@ export const Map = () => {
       zoom: 18,
       pitch: 60,
     })
-
+    // https://docs.mapbox.com/jp/mapbox-gl-js/example/3d-buildings/ 建物を3Dで表示する
+    map.on('load', () => {
+      // Insert the layer beneath any symbol layer.
+      const layers = map.getStyle().layers;
+      const labelLayerId = layers.find((layer) => layer.type === 'symbol' && layer.layout && layer.layout['text-field']);
+      map.addLayer(
+      {
+      'id': 'add-3d-buildings',
+      'source': 'composite',
+      'source-layer': 'building',
+      'filter': ['==', 'extrude', 'true'],
+      'type': 'fill-extrusion',
+      'minzoom': 15,
+      'paint': {
+        'fill-extrusion-color': '#aaa',
+        // Use an 'interpolate' expression to
+        // add a smooth transition effect to
+        // the buildings as the user zooms in.
+        'fill-extrusion-height': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          15,
+          0,
+          15.05,
+          ['get', 'height']
+        ],
+        'fill-extrusion-base': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          15,
+          0,
+          15.05,
+          ['get', 'min_height']
+        ],
+        'fill-extrusion-opacity': 0.6
+      }
+    },
+    labelLayerId?.id
+    );
+  });
+/*
     map.on("load", () => {
       map.addSource("mapbox-dem", {
         type: "raster-dem",
@@ -44,6 +87,8 @@ export const Map = () => {
         },
       })
     })
+*/
+
   }, [])
 
   return (
