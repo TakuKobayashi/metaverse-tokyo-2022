@@ -3,20 +3,19 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import styles from '../styles/Home.module.css';
-import { ThreeScene } from '../compoments/three-scene';
 import { useState, createRef } from 'react';
 import axios from 'axios';
 import { MapScene } from '../compoments/mapbox-render-map';
 
 const Home: NextPage = (context) => {
   console.log(context);
-  const threeSceneRef = createRef<ThreeScene>();
-  const threeScene = <ThreeScene ref={threeSceneRef} />;
+  const mapSceneRef = createRef<MapScene>();
+  const mapScene = <MapScene ref={mapSceneRef} />;
   const router = useRouter();
 
   const [responseJson, setResponseJson] = useState('');
   const parseAndShowVRM = (binary: ArrayBuffer | string) => {
-    threeSceneRef?.current?.updateVrmArryaBuffer(binary);
+    mapSceneRef?.current?.updateVrmArryaBuffer(binary);
     //    const parsedVrm = parseMetum(binary);
     //    setResponseJson(JSON.stringify(JSON.parse(parsedVrm.metaString), null, 2));
   };
@@ -47,8 +46,7 @@ const Home: NextPage = (context) => {
         <link href="https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css" rel="stylesheet" />
       </Head>
 
-      {threeScene}
-      <MapScene />
+      {mapScene}
 
       <footer className={styles.footer}>
         <a

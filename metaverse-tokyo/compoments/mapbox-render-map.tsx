@@ -1,5 +1,6 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
+import { ThreeVrmLoaderScene } from './three-vrm-loader-scene';
 
 // Grab the access token from your Mapbox account
 // I typically like to store sensitive things like this
@@ -7,6 +8,8 @@ import mapboxgl from 'mapbox-gl';
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN!;
 
 export class MapScene extends React.Component {
+  private threeScene?: ThreeVrmLoaderScene;
+
   constructor(props: any) {
     super(props);
   }
@@ -28,6 +31,7 @@ export class MapScene extends React.Component {
       zoom: 18,
       pitch: 60,
     });
+    this.threeScene = new ThreeVrmLoaderScene(map.getCanvas());
     // https://docs.mapbox.com/jp/mapbox-gl-js/example/3d-buildings/ 建物を3Dで表示する
     map.on('load', () => {
       // Insert the layer beneath any symbol layer.
@@ -73,6 +77,14 @@ export class MapScene extends React.Component {
       })
     })
 */
+  }
+
+  async updateVrmUrl(url: string): Promise<any> {
+    return this.threeScene?.updateVrmUrl(url);
+  }
+
+  async updateVrmArryaBuffer(arrayBuffer: string | ArrayBuffer): Promise<any> {
+    return this.threeScene?.updateVrmArryaBuffer(arrayBuffer);
   }
 
   onMapSetupComplete = (divElement: HTMLDivElement) => {
