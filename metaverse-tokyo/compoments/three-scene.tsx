@@ -42,11 +42,11 @@ export class ThreeScene extends React.Component {
     return vrm;
   }
 
-  private updatePositionLikeThirdPerson(){
+  private updatePositionLikeThirdPerson() {
     if (this.renderer && this.scene && this.camera && this.targetScene) {
       const targetPosition = this.targetScene.position;
-      this.camera.position.set(targetPosition.x, targetPosition.y + 1.5, targetPosition.z + 3)
-      this.camera.lookAt(this.targetScene.position)
+      this.camera.position.set(targetPosition.x, targetPosition.y + 1.5, targetPosition.z + 3);
+      this.camera.lookAt(this.targetScene.position);
     }
   }
 
@@ -70,7 +70,7 @@ export class ThreeScene extends React.Component {
     camera.position.set(0, 6, 18);
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    scene.add(camera)
+    scene.add(camera);
     this.camera = camera;
     renderer.setSize(width, height);
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -95,7 +95,7 @@ export class ThreeScene extends React.Component {
   render() {
     return (
       <div>
-        <canvas style={{ width: "100%", height: "100vh" }} ref={this.onCanvasLoaded} />
+        <canvas style={{ width: '100%', height: '100vh' }} ref={this.onCanvasLoaded} />
       </div>
     );
   }
