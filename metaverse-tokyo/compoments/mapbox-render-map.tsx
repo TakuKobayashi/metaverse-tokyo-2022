@@ -39,9 +39,8 @@ export class MapScene extends React.Component {
   }
 
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition((position) => {
+    navigator.geolocation.watchPosition((position) => {
       console.log(position)
-//      position.coords.latitude
       this.updateLocation({lng: position.coords.longitude, lat: position.coords.latitude})
     }, (err) => {
       console.log(err)
