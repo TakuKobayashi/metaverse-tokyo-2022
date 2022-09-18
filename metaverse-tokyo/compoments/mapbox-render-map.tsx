@@ -82,7 +82,7 @@ export class MapScene extends React.Component {
       //      style: "mapbox://styles/mapbox/satellite-streets-v11",
       style: 'mapbox://styles/mapbox/light-v10',
       center: this.currentPosition,
-      zoom: 18,
+      zoom: 20,
       pitch: 60,
     });
     this.map = map;
