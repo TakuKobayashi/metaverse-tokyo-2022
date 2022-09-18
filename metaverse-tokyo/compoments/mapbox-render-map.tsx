@@ -11,6 +11,16 @@ import { ThreeVrmLoaderScene } from './three-vrm-loader-scene';
 // in a .env file
 //mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN!;
 mapboxgl.accessToken = 'pk.eyJ1IjoidGFwdGFwcHVuIiwiYSI6ImNrMXlmYm5wNDBtbXYzaHBpa2lvNGtqN2IifQ.ptcQL38Jnzl53W22zgpM-A';
+
+interface ModelTransform {
+  translateX: number,
+  translateY: number,
+  translateZ: number,
+  rotateX: number,
+  rotateY: number,
+  rotateZ: number,
+  scale: number
+};
 export class MapScene extends React.Component {
   //private threeScene?: ThreeVrmLoaderScene;
 
@@ -18,12 +28,50 @@ export class MapScene extends React.Component {
   private camera: Camera | null = null;
   private renderer: WebGLRenderer | null = null;
   private map: mapboxgl.Map | null = null
+  private currentPosition: mapboxgl.LngLatLike = {
+    lat: 35.6796449,
+    lng: 139.735763,
+  }
+  private modelTransform?: ModelTransform
 
   constructor(props: any) {
     super(props);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log(position)
+//      position.coords.latitude
+      this.updateLocation({lng: position.coords.longitude, lat: position.coords.latitude})
+    }, (err) => {
+      console.log(err)
+    }, {
+      enableHighAccuracy: true,
+    })
+  }
+
+  updateLocation(lnglat: mapboxgl.LngLatLike){
+    this.map?.setCenter(lnglat)
+    const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
+      lnglat,
+      0,
+    );
+    console.log(modelAsMercatorCoordinate.meterInMercatorCoordinateUnits())
+
+    // transformation parameters to position, rotate and scale the 3D model onto the map
+    this.modelTransform = {
+      translateX: modelAsMercatorCoordinate.x,
+      translateY: modelAsMercatorCoordinate.y,
+      translateZ: modelAsMercatorCoordinate.z!,
+      rotateX: Math.PI / 2,
+      rotateY: 0,
+      rotateZ: 0,
+      /* Since the 3D model is in real world meters, a scale transform needs to be
+       * applied since the CustomLayerInterface expects units in MercatorCoordinates.
+       */
+      scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits(),
+    };
+  }
 
   initScene() {
     // create the map and configure it
@@ -33,16 +81,15 @@ export class MapScene extends React.Component {
       container: 'map',
       //      style: "mapbox://styles/mapbox/satellite-streets-v11",
       style: 'mapbox://styles/mapbox/light-v10',
-      center: {
-        lat: 35.6796449,
-        lng: 139.735763,
-      },
+      center: this.currentPosition,
       zoom: 18,
       pitch: 60,
     });
+    this.map = map;
     //this.threeScene = new ThreeVrmLoaderScene(map.getCanvas());
     // https://docs.mapbox.com/jp/mapbox-gl-js/example/3d-buildings/ 建物を3Dで表示する
     map.on('load', () => {
+      map.addControl(new mapboxgl.NavigationControl());
       // Insert the layer beneath any symbol layer.
       const layers = map.getStyle().layers;
       const labelLayerId = layers.find((layer) => layer.type === 'symbol' && layer.layout && layer.layout['text-field']);
@@ -67,27 +114,7 @@ export class MapScene extends React.Component {
         labelLayerId?.id,
       );
 
-      const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
-        {
-          lat: 35.6796449,
-          lng: 139.735763,
-        },
-        0,
-      );
-
-      // transformation parameters to position, rotate and scale the 3D model onto the map
-      const modelTransform = {
-        translateX: modelAsMercatorCoordinate.x,
-        translateY: modelAsMercatorCoordinate.y,
-        translateZ: modelAsMercatorCoordinate.z!,
-        rotateX: Math.PI / 2,
-        rotateY: 0,
-        rotateZ: 0,
-        /* Since the 3D model is in real world meters, a scale transform needs to be
-         * applied since the CustomLayerInterface expects units in MercatorCoordinates.
-         */
-        scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits(),
-      };
+      this.updateLocation(this.currentPosition)
 
       const customLayer: mapboxgl.CustomLayerInterface = {
         id: '3d-model',
@@ -122,7 +149,6 @@ export class MapScene extends React.Component {
           });
           */
 
-          this.map = map;
           this.renderer = new WebGLRenderer({
             canvas: map.getCanvas(),
             context: gl,
@@ -140,14 +166,15 @@ export class MapScene extends React.Component {
           })
 */
         },
+        // 繰り返し呼ばれれる
         render: (gl: WebGLRenderingContext, matrix: number[]) => {
-          const rotationX = new Matrix4().makeRotationAxis(new Vector3(1, 0, 0), modelTransform.rotateX);
-          const rotationY = new Matrix4().makeRotationAxis(new Vector3(0, 1, 0), modelTransform.rotateY);
-          const rotationZ = new Matrix4().makeRotationAxis(new Vector3(0, 0, 1), modelTransform.rotateZ);
+          const rotationX = new Matrix4().makeRotationAxis(new Vector3(1, 0, 0), this.modelTransform!.rotateX);
+          const rotationY = new Matrix4().makeRotationAxis(new Vector3(0, 1, 0), this.modelTransform!.rotateY);
+          const rotationZ = new Matrix4().makeRotationAxis(new Vector3(0, 0, 1), this.modelTransform!.rotateZ);
           const m = new Matrix4().fromArray(matrix);
           const l = new Matrix4()
-            .makeTranslation(modelTransform.translateX, modelTransform.translateY, modelTransform.translateZ)
-            .scale(new Vector3(modelTransform.scale, -modelTransform.scale, modelTransform.scale))
+            .makeTranslation(this.modelTransform!.translateX, this.modelTransform!.translateY, this.modelTransform!.translateZ)
+            .scale(new Vector3(this.modelTransform!.scale, -this.modelTransform!.scale, this.modelTransform!.scale))
             .multiply(rotationX)
             .multiply(rotationY)
             .multiply(rotationZ);
