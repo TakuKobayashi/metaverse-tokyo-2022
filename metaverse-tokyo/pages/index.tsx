@@ -35,8 +35,8 @@ const Home: NextPage = (context) => {
     const vrmRes = await axios.get(url, { responseType: 'arraybuffer' });
     parseAndShowVRM(vrmRes.data);
   };
-  onLoadVRM('http://localhost:3000/AliciaSolid.vrm');
-
+  onLoadVRM('https://taptappun.s3.ap-northeast-1.amazonaws.com/AliciaSolid.vrm');
+//  onLoadVRM('https://github.com/TakuKobayashi/metaverse-tokyo-2022/raw/master/metaverse-tokyo/public/AliciaSolid.vrm');
   return (
     <div className={styles.container}>
       <Head>

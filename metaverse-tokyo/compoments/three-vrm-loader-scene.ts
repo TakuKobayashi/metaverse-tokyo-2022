@@ -15,6 +15,7 @@ export class ThreeVrmLoaderScene {
     this.canvas = canvas;
     this.animate = this.animate.bind(this);
     this.updatePositionLikeThirdPerson = this.updatePositionLikeThirdPerson.bind(this);
+    this.initScene(canvas)
   }
 
   async updateVrmUrl(url: string): Promise<VRM> {
