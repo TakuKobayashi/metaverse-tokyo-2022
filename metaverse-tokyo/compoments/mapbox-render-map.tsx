@@ -68,7 +68,7 @@ export class MapScene extends React.Component {
       /* Since the 3D model is in real world meters, a scale transform needs to be
        * applied since the CustomLayerInterface expects units in MercatorCoordinates.
        */
-      scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits(),
+      scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits() * 10,
     };
   }
 
@@ -178,7 +178,7 @@ export class MapScene extends React.Component {
             .multiply(rotationY)
             .multiply(rotationZ);
 
-          //this.camera!.projectionMatrix = m.multiply(l);
+          this.camera!.projectionMatrix = m.multiply(l);
           this.renderer?.resetState();
           this.renderer?.render(this.scene!, this.camera!);
           this.map?.triggerRepaint();
