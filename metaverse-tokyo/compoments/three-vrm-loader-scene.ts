@@ -11,11 +11,11 @@ export class ThreeVrmLoaderScene {
   private frameId: number | null = null;
   private targetScene: Scene | Group | null = null;
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(canvas: HTMLCanvasElement, context: WebGLRenderingContext) {
     this.canvas = canvas;
     this.animate = this.animate.bind(this);
     this.updatePositionLikeThirdPerson = this.updatePositionLikeThirdPerson.bind(this);
-    this.initScene(canvas)
+    this.initScene(canvas, context);
   }
 
   async updateVrmUrl(url: string): Promise<VRM> {
@@ -48,8 +48,8 @@ export class ThreeVrmLoaderScene {
     }
   }
 
-  private initScene(canvas: HTMLCanvasElement) {
-    const renderer = new WebGLRenderer({ canvas: canvas, antialias: true });
+  private initScene(canvas: HTMLCanvasElement, context: WebGLRenderingContext) {
+    const renderer = new WebGLRenderer({ canvas: canvas, context: context, antialias: true });
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
     this.canvas = canvas;

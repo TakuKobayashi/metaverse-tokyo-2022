@@ -12,30 +12,6 @@ const Home: NextPage = (context) => {
   const mapScene = <MapScene ref={mapSceneRef} />;
   const router = useRouter();
 
-  const [responseJson, setResponseJson] = useState('');
-  const parseAndShowVRM = (binary: ArrayBuffer | string) => {
-    mapSceneRef?.current?.updateVrmArryaBuffer(binary);
-    //    const parsedVrm = parseMetum(binary);
-    //    setResponseJson(JSON.stringify(JSON.parse(parsedVrm.metaString), null, 2));
-  };
-  const onLoadFile = (files: File[]) => {
-    for (const file of files) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const readFileResult = reader.result;
-        if (readFileResult !== null) {
-          parseAndShowVRM(readFileResult);
-        }
-      };
-      reader.readAsArrayBuffer(file);
-    }
-  };
-  const onLoadVRM = async (url: string) => {
-    const vrmRes = await axios.get(url, { responseType: 'arraybuffer' });
-    parseAndShowVRM(vrmRes.data);
-  };
-  onLoadVRM('https://taptappun.s3.ap-northeast-1.amazonaws.com/AliciaSolid.vrm');
-//  onLoadVRM('https://github.com/TakuKobayashi/metaverse-tokyo-2022/raw/master/metaverse-tokyo/public/AliciaSolid.vrm');
   return (
     <div className={styles.container}>
       <Head>
