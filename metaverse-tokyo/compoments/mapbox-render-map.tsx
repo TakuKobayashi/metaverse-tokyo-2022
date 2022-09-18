@@ -5,8 +5,8 @@ import { ThreeVrmLoaderScene } from './three-vrm-loader-scene';
 // Grab the access token from your Mapbox account
 // I typically like to store sensitive things like this
 // in a .env file
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN!;
-
+//mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN!;
+mapboxgl.accessToken = "pk.eyJ1IjoidGFwdGFwcHVuIiwiYSI6ImNrMXlmYm5wNDBtbXYzaHBpa2lvNGtqN2IifQ.ptcQL38Jnzl53W22zgpM-A";
 export class MapScene extends React.Component {
   private threeScene?: ThreeVrmLoaderScene;
 
